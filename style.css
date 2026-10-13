@@ -9,7 +9,7 @@
   --edge: #6b6b6b;
   --veil: rgba(244, 244, 244, 0.86);
   --box-bg: rgba(244, 244, 244, 0.6);
-  --hero-veil: rgba(228, 228, 228, 0.65);
+  --frame-opacity: 0.2;
   --edge-soft: rgba(0, 0, 0, 0.22);
   --hand: "Caveat", "Bradley Hand", "Segoe Print", cursive;
   --sans: "Bricolage Grotesque", "Segoe UI", system-ui, sans-serif;
@@ -31,7 +31,7 @@
     --edge: #6b6b6b;
     --veil: rgba(8, 8, 8, 0.4);
     --box-bg: rgba(8, 8, 8, 0.45);
-    --hero-veil: rgba(8, 8, 8, 0.1);
+    --frame-opacity: 0.5;
     --edge-soft: rgba(255, 255, 255, 0.2);
   }
 }
@@ -47,7 +47,7 @@
   --edge: #6b6b6b;
   --veil: rgba(8, 8, 8, 0.4);
   --box-bg: rgba(8, 8, 8, 0.45);
-  --hero-veil: rgba(8, 8, 8, 0.1);
+  --frame-opacity: 0.5;
   --edge-soft: rgba(255, 255, 255, 0.2);
 }
 
@@ -175,11 +175,18 @@ section {
 }
 
 .hero {
-  background-color: var(--paper);
-  background-image: linear-gradient(var(--hero-veil), var(--hero-veil));
-  background-size: cover;
-  background-position: center;
+  position: relative;
+  isolation: isolate;
   padding: 56px clamp(20px, 6vw, 64px) 64px;
+}
+
+.hero::before {
+  content: "";
+  position: absolute;
+  inset: 0;
+  z-index: -1;
+  border-radius: inherit;
+  opacity: var(--frame-opacity);
 }
 
 .nav {
@@ -220,7 +227,8 @@ section {
 }
 
 .intro h1 {
-  font-size: clamp(2.6rem, 7vw, 4.6rem);
+  font-size: clamp(1.8rem, 4vw, 3.2rem);
+  white-space: nowrap;
   font-weight: 800;
   letter-spacing: -0.03em;
   line-height: 1;
@@ -257,6 +265,10 @@ section {
 
 .box p {
   color: var(--muted);
+}
+
+#about {
+  margin-top: 56px;
 }
 
 .about-top {
@@ -389,9 +401,13 @@ footer a {
 @media (min-width: 721px) {
   .hero {
     display: grid;
+    grid-template-columns: minmax(0, 1fr);
     align-content: center;
     aspect-ratio: 735 / 440;
-    padding: 72px 12%;
+    padding: 72px calc(min(1000px, 100vw - 32px) * 0.12);
+  }
+
+  .hero::before {
     background-size: 100% 100%;
   }
 }
